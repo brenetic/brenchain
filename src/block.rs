@@ -3,7 +3,7 @@ use super::*;
 
 pub struct Block {
     pub index: u32,
-    pub timestamp:u128,
+    pub timestamp: u128,
     pub hash: Hash,
     pub prev_block_hash: Hash,
     pub nonce: u64,

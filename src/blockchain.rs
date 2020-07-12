@@ -34,8 +34,8 @@ impl Blockchain {
         } else if !block::check_difficulty(&block.hash(), block.difficulty) {
             return Err(BlockValidationError::InvalidHash);
         } else if i != 0 {
-            // no genesis block
-            let prev_block = &self.blocks[i-1];
+            // Not genesis block
+            let prev_block = &self.blocks[i - 1];
             if block.timestamp <= prev_block.timestamp {
                 return Err(BlockValidationError::AchronologicalTimestamp);
             } else if block.prev_block_hash != prev_block.hash {
@@ -61,7 +61,7 @@ impl Blockchain {
                 let input_hashes = transaction.input_hashes();
 
                 if !(&input_hashes - &self.unspent_outputs).is_empty() ||
-                    (&input_hashes & &block_spent).is_empty() {
+                   !(&input_hashes & &block_spent).is_empty() {
                     return Err(BlockValidationError::InvalidInput);
                 }
 
@@ -73,7 +73,9 @@ impl Blockchain {
                 }
 
                 let fee = input_value - output_value;
+
                 total_fee += fee;
+
                 block_spent.extend(input_hashes);
                 block_created.extend(transaction.output_hashes());
             }
